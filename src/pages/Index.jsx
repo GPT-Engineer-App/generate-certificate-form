@@ -12,7 +12,7 @@ const Index = () => {
   const handleMobileNumberChange = (event) => setMobileNumber(event.target.value);
 
   const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent form submission from refreshing the page
+    event.preventDefault();
     if (!name || !mobileNumber) {
       toast({
         title: "Error",
@@ -21,10 +21,21 @@ const Index = () => {
         duration: 3000,
         isClosable: true,
       });
-      return;
     }
-    // Generate the certificate
-    setCertificate(`Congratulations ${name}, your mobile number ${mobileNumber} has been registered.`);
+  };
+
+  const generateCertificate = () => {
+    if (name && mobileNumber) {
+      setCertificate(`Congratulations ${name}, your mobile number ${mobileNumber} has been registered.`);
+    } else {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields and register before generating a certificate",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -40,8 +51,11 @@ const Index = () => {
           <Input id="mobileNumber" placeholder="Enter your mobile number" value={mobileNumber} onChange={handleMobileNumberChange} />
         </FormControl>
 
-        <Button leftIcon={<FaCertificate />} colorScheme="teal" type="submit">
-          Submit
+        <Button colorScheme="teal" type="submit">
+          Register
+        </Button>
+        <Button leftIcon={<FaCertificate />} colorScheme="blue" onClick={generateCertificate}>
+          Generate Certificate
         </Button>
       </VStack>
       {certificate && (
