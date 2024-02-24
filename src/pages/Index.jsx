@@ -24,9 +24,15 @@ const Index = () => {
     }
   };
 
-  const generateCertificate = () => {
+  const downloadCertificate = () => {
     if (name && mobileNumber) {
-      setCertificate(`Congratulations ${name}, your mobile number ${mobileNumber} has been registered.`);
+      const certificateText = `Congratulations ${name}, your mobile number ${mobileNumber} has been registered.`;
+      const element = document.createElement("a");
+      const file = new Blob([certificateText], { type: "text/plain" });
+      element.href = URL.createObjectURL(file);
+      element.download = `${name}_certificate.txt`;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
     } else {
       toast({
         title: "Error",
@@ -54,7 +60,7 @@ const Index = () => {
         <Button colorScheme="teal" type="submit">
           Register
         </Button>
-        <Button leftIcon={<FaCertificate />} colorScheme="blue" onClick={generateCertificate}>
+        <Button leftIcon={<FaCertificate />} colorScheme="blue" onClick={downloadCertificate}>
           Generate Certificate
         </Button>
       </VStack>
