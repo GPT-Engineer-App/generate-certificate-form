@@ -24,15 +24,36 @@ const Index = () => {
     }
   };
 
+  const generateCertificateDesign = () => {
+    return `
+      <html>
+        <head>
+          <style>
+            body { font-family: 'Arial', sans-serif; text-align: center; padding: 40px; }
+            .certificate { border: 5px solid #ddd; padding: 20px; }
+            .title { font-size: 24px; font-weight: bold; }
+            .content { margin-top: 20px; font-size: 18px; }
+          </style>
+        </head>
+        <body>
+          <div class="certificate">
+            <div class="title">Certificate of Registration</div>
+            <div class="content">Congratulations ${name},<br>Your mobile number ${mobileNumber} has been registered.</div>
+          </div>
+        </body>
+      </html>
+    `;
+  };
+
   const downloadCertificate = () => {
     if (name && mobileNumber) {
-      const certificateText = `Congratulations ${name}, your mobile number ${mobileNumber} has been registered.`;
-      const element = document.createElement("a");
-      const file = new Blob([certificateText], { type: "text/plain" });
-      element.href = URL.createObjectURL(file);
-      element.download = `${name}_certificate.txt`;
-      document.body.appendChild(element); // Required for this to work in FireFox
-      element.click();
+      const certificateHTML = generateCertificateDesign();
+      const printWindow = window.open("", "_blank");
+      printWindow.document.write(certificateHTML);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
     } else {
       toast({
         title: "Error",
